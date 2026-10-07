@@ -19,7 +19,7 @@
 ## 快速开始
 
 ```sh
-make pdf    # 内容/ 下全部 .typ → PDF
+make pdf    # 内容/ 下全部 .typ → PDF（逐页套用模板）
 make web    # 多页站点：各页共用一份 CSS，跨页元素连成链接
 make watch  # 监听入口，自动重编
 ```
