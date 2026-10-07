@@ -10,6 +10,7 @@
 - `脚本/` —— 独立页入口 `页面.typ` 与网页后处理 `web_post.sh`
 - `附件/` —— 元素系统数据 `元素系统.csv`
 - `图片/` —— 图片素材，已配置 Git LFS（见 `.gitattributes`）
+- `.webfonts/` —— 自托管网页字体目录（`.` 开头，默认隐藏），默认只有说明文件；字体由使用者自行放入（见 `.webfonts/README.md`）
 - `SKILL.md` —— AI 写作与编译规范（技能说明）
 - `.github/workflows/web.yml` —— 已启用的网页构建与发布工作流
 - `LICENSE` —— 许可证，创建项目后请改成你的名字
@@ -29,6 +30,7 @@ make watch  # 监听入口，自动重编
 - [ ] 修改 `配置.typ` 中的标题、副标题、作者、品牌名等项目信息
 - [ ] 按需要增删 `内容/` 下章节，并在 `内容/index.typ` 调整 `#include`
 - [ ] 替换 `附件/元素系统.csv` 为你的项目素材
+- [ ] 需要自托管网页字体时，把四个 `.woff2` 放进 `.webfonts/`（见 `.webfonts/README.md`）
 - [ ] 按需修改或者禁用`配置.typ` 中的 `导航`
 - [ ] 在仓库 Settings → Actions 中确认允许工作流运行
 - [ ] 推送到 `main` 触发 `.github/workflows/web.yml`，确认 `web` 分支产物更新
@@ -43,6 +45,12 @@ make watch  # 监听入口，自动重编
 | --- | --- | --- | --- |
 | 古龙 | 龙 | 龙 | 古代龙 |
 | 巨人 | 巨人 | 石头人 | 巨怪 |
+
+## 字体
+
+网页的自托管字体放在 `.webfonts/`（`.` 开头，默认隐藏），默认不含字体文件（模板仓库不便用
+Git LFS 托管大字体）。需要时按 `.webfonts/README.md` 放入四个 `.woff2`，`make web` 会把它们
+拷到产物的 `dist/webfonts/`，CI 再按用字子集化；没放字体也能正常构建，只是网页回退到系统字体。
 
 ## 注意
 
