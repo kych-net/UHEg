@@ -9,7 +9,7 @@
 - `内容/` —— 分章正文，每个 `.typ` 都会编译出一份文档
 - `脚本/` —— 独立页入口 `页面.typ` 与网页后处理 `web_post.sh`
 - `附件/` —— 元素系统数据与素材
-- `github/` —— 部署网页用的工作流模板（要启用可改名为 `.github/`）
+- `.github/workflows/web.yml` —— 已启用的网页构建与发布工作流
 
 ## 快速开始
 
@@ -18,6 +18,15 @@ make pdf    # 内容/ 下全部 .typ → PDF
 make web    # 多页站点：各页共用一份 CSS，跨页元素连成链接
 make watch  # 监听入口，自动重编
 ```
+
+## 创建项目后清单
+
+- [ ] 修改 `配置.typ` 中的标题、副标题、作者、品牌名等项目信息
+- [ ] 按需要增删 `内容/` 下章节，并在 `内容/index.typ` 调整 `#include`
+- [ ] 替换 `附件/示例插图.jpg` 与 `附件/元素系统.csv` 为你的项目素材
+- [ ] 在仓库 Settings → Actions 中确认允许工作流运行
+- [ ] 推送到 `main` 触发 `.github/workflows/web.yml`，确认 `web` 分支产物更新
+- [ ] 在托管平台绑定 `web` 分支并关闭平台侧构建
 
 ## 元素系统一览
 
@@ -51,7 +60,6 @@ $$
 
 ## 部署网页
 
-`make web` 产出的 `dist/` 是纯静态站点，可直接托管。项目里带着一份 GitHub Actions
-工作流 `github/workflows/web.yml`：要用它自动构建，把 `github/` 改名为 `.github/`
-（前面加一个点），推送 `main` 后它会把产物强制推到 `web` 分支；然后在托管平台绑定
-`web` 分支并关闭平台构建即可。
+`make web` 产出的 `dist/` 是纯静态站点，可直接托管。仓库已内置并启用 GitHub Actions
+工作流 `.github/workflows/web.yml`：推送 `main` 后会把产物强制推到 `web` 分支；然后
+在托管平台绑定 `web` 分支并关闭平台构建即可。
