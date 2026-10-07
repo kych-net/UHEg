@@ -3,7 +3,7 @@
 // / Site config: re-exports the template and defines the web template.
 // Chapters only write #import "../配置.typ": * — the template is re-exported here.
 
-#import "@preview/underhell:0.6.1": *
+#import "@preview/underhell:1.0.0": *
 
 // 重定义 导入:模板包里的同名函数用 include "/" + 路径,但包内文件的 "/" 以*包根*
 // 为基准(Typst 沙箱),会去包缓存里找本项目文件而报错。改在项目内定义,"/" 即以
@@ -31,6 +31,16 @@
   品牌名: "我的世界",
   备案号: "",
   元素系统数据: 元素数据,
+)
+
+// 网页右上角导航(模板的 页脚链接: 参数):PDF 一项指向本页同名 .pdf(如 /概述.pdf),
+// 其余为仓库外链。传入本页 PDF 的站点路径——各独立页由 脚本/页面.typ 按自身路径算出,
+// 入口页 内容/index.typ 传 "/index.pdf"。
+// / Site nav (页脚链接:): the PDF entry points at this page's own .pdf.
+#let 站点链接(本页PDF) = (
+  (标签: "PDF", 网址: 本页PDF, 提示: "下载本页 PDF"),
+  (标签: "GitHub", 网址: "https://github.com/kych-net/UHEg", 提示: "GitHub 仓库"),
+  (标签: "GitCode", 网址: "https://gitcode.com/CrossDark/UHEg", 提示: "GitCode 仓库"),
 )
 
 #let 导航 = (

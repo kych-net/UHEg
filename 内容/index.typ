@@ -5,7 +5,7 @@
 // separate files under 内容/ and are merged with #include.
 #import "../配置.typ": *
 
-#show: 网页模板
+#show: 网页模板.with(页脚链接: 站点链接("/index.pdf"))
 
 #outline(title: "目录")
 
