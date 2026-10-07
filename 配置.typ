@@ -5,6 +5,14 @@
 
 #import "@preview/underhell:0.6.1": *
 
+// 重定义 导入:模板包里的同名函数用 include "/" + 路径,但包内文件的 "/" 以*包根*
+// 为基准(Typst 沙箱),会去包缓存里找本项目文件而报错。改在项目内定义,"/" 即以
+// --root 为基准,调用处照旧写仓库根相对路径(如 "内容/地理/主行星.typ")。
+#let 导入(路径, 偏移: 1) = {
+  set heading(offset: 偏移)
+  include "/" + 路径
+}
+
 // 元素系统数据:宽表 CSV,首列是元素 id,其后每列是一个元素系统,
 // 单元格为该元素在对应系统下的名词(留空则回退)。列名可自行增删。
 // / Element-system data: wide CSV, first column = element id, each further
