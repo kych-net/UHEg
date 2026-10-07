@@ -28,6 +28,7 @@ make watch  # 监听入口，自动重编
 - [ ] 在仓库 Settings → Actions 中确认允许工作流运行
 - [ ] 推送到 `main` 触发 `.github/workflows/web.yml`，确认 `web` 分支产物更新
 - [ ] 在托管平台绑定 `web` 分支并关闭平台侧构建
+- [ ] 把 `LICENSE` 中版权改成你的名字
 
 ## 元素系统
 
