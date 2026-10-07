@@ -1,8 +1,7 @@
 name: 构建静态网页并发布到 web 分支
 
 # 把 make web 的产物提交到 web 分支,供 Cloudflare Pages / EdgeOne Pages 绑定发布。
-# 本文件随模板一起分发(放在不带点的 github/ 里,Typst 打包会跳过隐藏目录)。
-# 启用时把 github/ 改名为 .github/,GitHub 才会识别这份工作流。
+# 本文件已放在 .github/workflows/ 下,推送到 main 会直接触发。
 on:
   push:
     branches: [main]
