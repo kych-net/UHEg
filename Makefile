@@ -16,6 +16,11 @@
 pdf:  ## 编译 内容/ 下全部 .typ 为 PDF(逐页经 脚本/页面.typ 套用模板)
 	@set -e; for f in $$(find 内容 -name '*.typ' | sort); do \
 	  rel="$${f#内容/}"; \
+	  d=$$(dirname "$$f"); d=$${d#内容}; d=$${d#/}; \
+	  own=$$(basename "$$f" .typ); \
+	  dirj=$$(printf '%s' "$$d" | sed 's/\\/\\\\/g; s/"/\\"/g'); \
+	  filesj=$$(find "$$(dirname "$$f")" -maxdepth 1 -name '*.typ' ! -name "$$own.typ" \
+	    -exec basename {} .typ \; | sort | sed 's/\\/\\\\/g; s/"/\\"/g' | sed 's/.*/"&"/' | paste -sd, -); \
 	  case "$$rel" in \
 	    index.typ)   out="dist/index.pdf"; src="$$f"; args="";; \
 	    */index.typ) p="$${rel%/index.typ}"; out="dist/$$p.pdf"; \
@@ -25,12 +30,18 @@ pdf:  ## 编译 内容/ 下全部 .typ 为 PDF(逐页经 脚本/页面.typ 套�
 	  esac; \
 	  mkdir -p "$$(dirname "$$out")"; \
 	  echo "PDF  $$f -> $$out"; \
-	  typst compile --root . $$args "$$src" "$$out"; \
+	  typst compile --root . --input 索引="{\"目录\":\"$$dirj\",\"文件\":[$$filesj]}" \
+	    $$args "$$src" "$$out"; \
 	done
 
 web:  ## 网页:多页站点,收尾跑 脚本/web_post.sh(HTML 导出为实验特性)
 	@set -e; for f in $$(find 内容 -name '*.typ' | sort); do \
 	  rel="$${f#内容/}"; \
+	  d=$$(dirname "$$f"); d=$${d#内容}; d=$${d#/}; \
+	  own=$$(basename "$$f" .typ); \
+	  dirj=$$(printf '%s' "$$d" | sed 's/\\/\\\\/g; s/"/\\"/g'); \
+	  filesj=$$(find "$$(dirname "$$f")" -maxdepth 1 -name '*.typ' ! -name "$$own.typ" \
+	    -exec basename {} .typ \; | sort | sed 's/\\/\\\\/g; s/"/\\"/g' | sed 's/.*/"&"/' | paste -sd, -); \
 	  case "$$rel" in \
 	    index.typ)   out="dist/index.html"; src="$$f"; args="";; \
 	    */index.typ) p="$${rel%/index.typ}"; out="dist/$$p/index.html"; \
@@ -40,7 +51,9 @@ web:  ## 网页:多页站点,收尾跑 脚本/web_post.sh(HTML 导出为实验�
 	  esac; \
 	  mkdir -p "$$(dirname "$$out")"; \
 	  echo "HTML $$f -> $$out"; \
-	  typst compile --root . --features html --input web=true $$args --format html "$$src" "$$out"; \
+	  typst compile --root . --features html --input web=true \
+	    --input 索引="{\"目录\":\"$$dirj\",\"文件\":[$$filesj]}" \
+	    $$args --format html "$$src" "$$out"; \
 	done
 	@set -e; for f in $$(find 内容 -name '*.html' | sort); do \
 	  out="dist/$${f#内容/}"; \
@@ -57,8 +70,13 @@ web:  ## 网页:多页站点,收尾跑 脚本/web_post.sh(HTML 导出为实验�
 	  echo "FONT  跳过:.webfonts/ 下无 .woff2(见 .webfonts/README.md)"; \
 	fi
 
-watch:  ## 监听改动,自动重编入口 PDF
-	typst watch --root . 内容/index.typ dist/index.pdf
+watch:  ## 监听改动,自动重编入口 PDF(索引清单启动时生成,新增文件需重启)
+	@d=$$(dirname 内容/index.typ); d=$${d#内容}; d=$${d#/}; \
+	dirj=$$(printf '%s' "$$d" | sed 's/\\/\\\\/g; s/"/\\"/g'); \
+	filesj=$$(find "$$(dirname 内容/index.typ)" -maxdepth 1 -name '*.typ' ! -name 'index.typ' \
+	  -exec basename {} .typ \; | sort | sed 's/\\/\\\\/g; s/"/\\"/g' | sed 's/.*/"&"/' | paste -sd, -); \
+	typst watch --root . --input 索引="{\"目录\":\"$$dirj\",\"文件\":[$$filesj]}" \
+	  内容/index.typ dist/index.pdf
 
 clean:  ## 清理产物
 	rm -rf dist
